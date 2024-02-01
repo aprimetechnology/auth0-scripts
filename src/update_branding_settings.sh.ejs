@@ -1,0 +1,7 @@
+echo -e "<%= env %> - Updating Auth0 branding settings..."
+curl -L -X PATCH '<%= auth0Url %>/api/v2/branding' \
+-H 'Content-Type: application/json' \
+-H 'Accept: application/json' \
+-H 'Authorization: Bearer <%= auth0AuthToken %>' \
+-d @dist/<%= env %>/branding_settings.json
+echo -e "\n"

@@ -1,0 +1,6 @@
+echo -e "<%= env %> - Updating Auth0 Universal Login template..."
+curl -L -X PUT '<%= auth0Url %>/api/v2/branding/templates/universal-login' \
+-H 'Content-Type: text/html' \
+-H 'Authorization: Bearer <%= auth0AuthToken %>' \
+-d @dist/<%= env %>/ul_template.html
+echo -e "\n"

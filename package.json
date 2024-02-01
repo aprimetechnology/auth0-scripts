@@ -1,0 +1,19 @@
+{
+  "name": "auth0-templates",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:dev": "find src -type f -name '*.ejs' -exec bash -c 'basename -s .ejs {}' \\; | xargs -I{} bash -c 'npx ejs src/{}.ejs -f environment/environment.dev.json -o ./dist/dev/{}'",
+    "build:qa": "find src -type f -name '*.ejs' -exec bash -c 'basename -s .ejs {}' \\; | xargs -I{} bash -c 'npx ejs src/{}.ejs -f environment/environment.qa.json -o ./dist/qa/{}'",
+    "build:prod": "find src -type f -name '*.ejs' -exec bash -c 'basename -s .ejs {}' \\; | xargs -I{} bash -c 'npx ejs src/{}.ejs -f environment/environment.prod.json -o ./dist/prod/{}'",
+    "deploy:dev": "find dist/dev -type f -name '*.sh' -exec bash {} \\;",
+    "deploy:qa": "find dist/qa -type f -name '*.sh' -exec bash {} \\;",
+    "deploy:prod": "find dist/prod -type f -name '*.sh' -exec bash {} \\;"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9"
+  }
+}

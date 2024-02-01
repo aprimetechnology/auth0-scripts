@@ -1,0 +1,11 @@
+{
+  "env": "dev",
+  "appUrl": "https://dev.myapp.com",
+  "url": "https://qa.web.myapp.com",
+  "auth0Url": "https://myapp.us.auth0.com",
+  "auth0AuthToken": "<PASTE TOKEN HERE>",
+  "auth0ThemeId": "theme_id",
+  "app1": "app_id_1",
+  "app2": "app_id_2",
+  "dataSiteId": "123"
+}

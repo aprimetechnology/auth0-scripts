@@ -1,0 +1,7 @@
+echo -e "<%= env %> - Updating Auth0 custom text for login-id prompt..."
+curl -L -X PUT '<%= auth0Url %>/api/v2/prompts/login-id/custom-text/en' \
+-H 'Content-Type: application/json' \
+-H 'Accept: application/json' \
+-H 'Authorization: Bearer <%= auth0AuthToken %>' \
+-d @dist/<%= env %>/prompt_login-id.json
+echo -e "\n"

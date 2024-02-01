@@ -1,0 +1,7 @@
+echo -e "<%= env %> - Updating Auth0 prompts settings..."
+curl -L -X PATCH '<%= auth0Url %>/api/v2/prompts' \
+-H 'Content-Type: application/json' \
+-H 'Accept: application/json' \
+-H 'Authorization: Bearer <%= auth0AuthToken %>' \
+-d @dist/<%= env %>/prompts_settings.json
+echo -e "\n"

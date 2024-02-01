@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+  <head>
+    {%- auth0:head -%}
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        margin-top: 125px;
+      }
+
+      #myapp-appName {
+        display: block;
+        max-width: 400px;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 32px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 15px;
+      }
+
+      #myapp-message {
+        display: block;
+        max-width: 400px;
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 32px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 15px;
+      }
+
+      #myapp-footer {
+        margin: 0 16px;
+        text-align: center;
+        padding: 12px 0;
+        color: #999999;
+        border-top: 1px solid #999999;
+        font-size: 15px;
+        line-height: 135%;
+        letter-spacing: 0.0015em;
+        /* Use a high z-index for future-proofing */
+        z-index: 10;
+       }
+      #myapp-footer p {
+        margin-bottom: 1rem;
+      }
+      #myapp-footer a {
+        text-decoration: underline;
+        color: inherit;
+        font-size: inherit;
+       }
+
+@media only screen and (max-height: 850px) {
+    #myapp-footer {
+        font-size: 12px !important;
+    }
+}
+    </style>
+    <title>{{ prompt.screen.texts.pageTitle }}</title>
+  </head>
+  <body>
+    <div id="myapp-widget-wrapper">
+      <div>
+        {% if transaction.params.ext-message %}
+        <div id="myapp-message">
+          {{ transaction.params.ext-message | url_decode }}
+        </div>
+        {% endif %}
+        {% if application.id != "<%= app1 %>" %}
+        <div id="myapp-appName">
+          {{ application.name }}
+        </div>
+        {% endif %}
+      </div>
+      {%- auth0:widget -%}
+    </div>
+    <footer id="myapp-footer">
+      <p>
+        Footer text.
+      </p>
+    </footer>
+    <!-- Get email from local storage -->
+    <script>
+      if (localStorage.getItem('email') && document.getElementById('username')) {
+        document.getElementById('username').setAttribute('value', localStorage.getItem('email'));
+      }
+    </script>
+    <!-- Save email in local storage -->
+    <script>
+      if (document.getElementsByName('action') && document.getElementsByName('action')[0] &&
+        document.getElementById('username') && document.getElementById('username').value) {
+        document.getElementsByName('action')[0].addEventListener('click', saveEmailInLocalStorage);
+      }
+      function saveEmailInLocalStorage() {
+        localStorage.setItem('email', document.getElementById('username').value);
+      }
+    </script>
+    <!-- Auth0 template manipulation -->
+    <script type="text/javascript">
+      function find_element_with_signup_and_replace_link(array) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i].getAttribute('href').includes('signup')) {
+            if ('{{ application.id }}' !== '<%= app2 %>') {
+              array[i].setAttribute('href', '<%= url %>/#footer');
+              break;
+            }
+          }
+        }
+      }
+      find_element_with_signup_and_replace_link(document.getElementsByTagName('a'));
+      function string_between_strings(startStr, endStr, str) {
+        pos = str.indexOf(startStr) + startStr.length;
+        return str.substring(pos, str.indexOf(endStr, pos));
+      }
+      function find_element_with_signup_and_hide_it(array) {
+        if ('{{ application.id }}' === '<%= app2 %>' ||
+          '{{ transaction.params.ext-message }}' === 'account_creation_message') {
+          var signUpLinkClassId = '';
+          for (var i = 0; i < array.length; i++) {
+            if (array[i].innerText === 'Not a customer? Sign up here') {
+              signUpLinkClassId = string_between_strings('<p class="', '">Not a customer?', array[i].outerHTML).split(' ').pop();
+            }
+          }
+          if (signUpLinkClassId) {
+            var style = document.createElement("style");
+            document.head.appendChild(style);
+            style.sheet.insertRule(`.${signUpLinkClassId} { display: none; }`);
+          }
+        }
+      }
+      find_element_with_signup_and_hide_it(document.getElementsByTagName('p'));
+      function find_element_with_message_and_replace_text(messageType, newText) {
+        if ('{{ transaction.params.ext-message }}' === messageType) {
+          document.getElementById('myapp-message').innerText = newText;
+        }
+      }
+      if ('{{ transaction.params.ext-message }}') {
+        find_element_with_message_and_replace_text('account_creation_message',
+        'Congratulations!\n' + 'Your account has been created!\n' +
+        'For your security, we require you to re-enter your email address and password below.');
+        find_element_with_message_and_replace_text('logout_due_to_inactivity_message',
+        'For your security, you have been logged out due to 10 minutes of inactivity.\n' +
+        'You may log in again below.');
+      }
+    </script>
+  </body>
+</html>
